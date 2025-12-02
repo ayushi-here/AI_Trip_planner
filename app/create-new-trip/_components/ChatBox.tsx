@@ -33,8 +33,8 @@ export default function ChatBox() {
         setMessages((prev: Message[]) => [...prev, newMsg]);
 
         const result = await axios.post('/api/aimodel', {
-            messages: [...messages, newMsg]
-            isFinal: isFinal
+            messages: [...messages, newMsg],
+            isFinal: isFinal,
         });
 
         setMessages((prev: Message[]) => [...prev, {
