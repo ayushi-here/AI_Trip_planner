@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 
 export const openai = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.GROK_API_Key,
+  apiKey: process.env.GROK_API_KEY,
 });
 
 const PROMPT = `You are an AI Trip Planner Agent. Your goal is to help the user plan a trip by asking one relevant trip-related question at a time
