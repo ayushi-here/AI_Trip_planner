@@ -7,21 +7,21 @@ import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 
-const suggestions = [
+export const suggestions = [
     {
         title: 'Create New Trip',
         icon: <Globe2 className='text-blue-400 h-5 w-5' />
     },
     {
-        title: 'Create New Trip',
+        title: 'Inspire me where to go',
         icon: <Plane className='text-green-400 h-5 w-5' />
     },
     {
-        title: 'Create New Trip',
+        title: 'Discover Hidden gems',
         icon: <Mountain className='text-orange-400 h-5 w-5' />
     },
     {
-        title: 'Create New Trip',
+        title: 'Adventure Destination',
         icon: <Map className='text-blue-400 h-5 w-5' />
     }
 ]
@@ -37,6 +37,7 @@ function Hero() {
             return;
         }
         //Navigate to Create Trip Planner Web Page
+        router.push('/create-new-trip')
     }
 
     return (
