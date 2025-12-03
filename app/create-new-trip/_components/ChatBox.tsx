@@ -7,6 +7,8 @@ import React, { useEffect, useState } from 'react'
 import EmptyBoxState from './EmptyBoxState'
 import GroupSizeUI from './GroupSizeUI'
 import BudgetUi from './BudgetUi'
+import FinalUI from './FinalUI'
+import SelectDaysUI from './SelectDaysUi'
 
 type Message = {
     role: string,
@@ -17,18 +19,18 @@ type Message = {
 export default function ChatBox() {
 
     const [messages, setMessages] = useState<Message[]>([]);
-    const [userInput, setUserInput] = useState<string>();
+    const [userInput, setUserInput] = useState<string>('');
     const [loading, setLoading] = useState(false);
     const [isFinal, setIsFinal] = useState(false);
     const onSend = async () => {
         if (!userInput?.trim()) return;
         setLoading(true);
-        setUserInput('');
 
         const newMsg: Message = {
             role: 'user',
             content: userInput
         }
+        setUserInput('');
 
         setMessages((prev: Message[]) => [...prev, newMsg]);
 
@@ -37,23 +39,29 @@ export default function ChatBox() {
             isFinal: isFinal,
         });
 
-        setMessages((prev: Message[]) => [...prev, {
+        console.log("TRIP", result.data);
+
+        !isFinal && setMessages((prev: Message[]) => [...prev, {
             role: 'assistant',
             content: result?.data?.resp,
             ui: result?.data?.ui
         }]);
 
-        console.log(result.data);
         setLoading(false);
     }
 
     const RenderGenerativeUi=(ui:string|undefined)=>{
         if(ui=='budget'){
             //budget ui component
-            return <BudgetUi onSelectedOption={(v:string)=>{setUserInput(v);onSend()}}/>
-        }else if(ui=='groupSize'){
+            return <BudgetUi onSelectedOption={(v: string) => { setUserInput(v); onSend() }} />
+        } else if (ui == 'groupSize') {
             //group size ui component
-            return <GroupSizeUI onSelectedOption={(v:string)=>{setUserInput(v);onSend()}}/>
+            return <GroupSizeUI onSelectedOption={(v: string) => { setUserInput(v); onSend() }} />
+        } else if (ui === 'tripDuration' || ui === 'days') {
+            //no. of days
+            return <SelectDaysUI onSelectedOption={(v: string) => { setUserInput(v); onSend() }} />
+        } else if (ui === 'final') {
+            return <FinalUI viewTrip={() => console.log("View Trip clicked")} />
         }
         return null
     }
@@ -62,9 +70,16 @@ export default function ChatBox() {
         const lastMsg=messages[messages.length-1];
         if(lastMsg?.ui=='final'){
             setIsFinal(true);
-            onSend();
+            setUserInput('Ok, Great!')
+            // onSend();
         }
     },[messages])
+
+    useEffect(()=>{
+        if(isFinal && userInput){
+            onSend();
+        }
+    },[isFinal]);
 
     return (
         <div className='h-[80vh] flex flex-col'>
