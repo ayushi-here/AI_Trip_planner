@@ -9,19 +9,36 @@ import GroupSizeUI from './GroupSizeUI'
 import BudgetUi from './BudgetUi'
 import FinalUI from './FinalUI'
 import SelectDaysUI from './SelectDaysUi'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { useUserDetail } from '@/app/provider'
+import { v4 as uuidv4 } from 'uuid'
 
 type Message = {
     role: string,
     content: string,
-    ui?:string,
+    ui?: string,
+}
+
+export type TripInfo = {
+    budget: string,
+    destination: string,
+    duration: string,
+    group_size: string,
+    origin: string,
+    hotels: any,
+    itinerary: any
 }
 
 export default function ChatBox() {
 
     const [messages, setMessages] = useState<Message[]>([]);
-    const [userInput, setUserInput] = useState<string>('');
+    const [userInput, setUserInput] = useState<string>();
     const [loading, setLoading] = useState(false);
     const [isFinal, setIsFinal] = useState(false);
+    const [tripDetail, setTripDetail] = useState<TripInfo>();
+    const SaveTripDetail = useMutation(api.tripDetail.CreateTripDetail);
+    const { userDetail, setUserDetail } = useUserDetail();
     const onSend = async () => {
         if (!userInput?.trim()) return;
         setLoading(true);
@@ -47,11 +64,21 @@ export default function ChatBox() {
             ui: result?.data?.ui
         }]);
 
+        if (isFinal) {
+            setTripDetail(result?.data?.trip_plan);
+            const tripId = uuidv4();
+            await SaveTripDetail({
+                tripDetail: result?.data?.trip_plan,
+                tripId: tripId,
+                uid: userDetail?._id
+            });
+        }
+
         setLoading(false);
     }
 
-    const RenderGenerativeUi=(ui:string|undefined)=>{
-        if(ui=='budget'){
+    const RenderGenerativeUi = (ui: string | undefined) => {
+        if (ui == 'budget') {
             //budget ui component
             return <BudgetUi onSelectedOption={(v: string) => { setUserInput(v); onSend() }} />
         } else if (ui == 'groupSize') {
@@ -61,29 +88,31 @@ export default function ChatBox() {
             //no. of days
             return <SelectDaysUI onSelectedOption={(v: string) => { setUserInput(v); onSend() }} />
         } else if (ui === 'final') {
-            return <FinalUI viewTrip={() => console.log("View Trip clicked")} />
+            return <FinalUI viewTrip={() => console.log("View Trip clicked")}
+                disable={!tripDetail}
+            />
         }
         return null
     }
 
-    useEffect(()=>{
-        const lastMsg=messages[messages.length-1];
-        if(lastMsg?.ui=='final'){
+    useEffect(() => {
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg?.ui == 'final') {
             setIsFinal(true);
             setUserInput('Ok, Great!')
             // onSend();
         }
-    },[messages])
+    }, [messages])
 
-    useEffect(()=>{
-        if(isFinal && userInput){
+    useEffect(() => {
+        if (isFinal && userInput) {
             onSend();
         }
-    },[isFinal]);
+    }, [isFinal]);
 
     return (
         <div className='h-[80vh] flex flex-col'>
-            {messages?.length==0 && <EmptyBoxState onSelectOption={(v:string)=>{ setUserInput(v); onSend()}} />}
+            {messages?.length == 0 && <EmptyBoxState onSelectOption={(v: string) => { setUserInput(v); onSend() }} />}
             {/* Display Messages */}
             <section className='flex-1 overflow-y-auto p-4'>
                 {messages.map((msg: Message, index) => (
@@ -96,17 +125,17 @@ export default function ChatBox() {
                         <div className='flex justify-start mt-2' key={index}>
                             <div className='max-w-lg bg-gray-100 text-black px-4 py-2 rounded-lg'>
                                 {msg.content}
-                                {RenderGenerativeUi(msg.ui??'')}
+                                {RenderGenerativeUi(msg.ui ?? '')}
                             </div>
                         </div>
 
                 ))}
 
                 {loading && <div className='flex justify-start mt-2' >
-                            <div className='max-w-lg bg-gray-100 text-black px-4 py-2 rounded-lg'>
-                                <Loader className='animate-spin'/>
-                            </div>
-                        </div>}
+                    <div className='max-w-lg bg-gray-100 text-black px-4 py-2 rounded-lg'>
+                        <Loader className='animate-spin' />
+                    </div>
+                </div>}
 
             </section>
             {/* User Input */}

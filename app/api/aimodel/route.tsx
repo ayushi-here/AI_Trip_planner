@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 
 export const openai = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.GROK_API_KEY,
+  apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 const PROMPT = `You are an AI Trip Planner Agent. Your goal is to help the user plan a trip by asking one relevant trip-related question at a time
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
 
   try{
   const completion = await openai.chat.completions.create({
-    model: "x-ai/grok-4.1-fast:free",
+    model: "openai/gpt-4.1-mini",
     response_format:{type:'json_object'},
     messages: [
       {
