@@ -10,14 +10,14 @@ const menuOptions = [
     name: 'Home',
     path: '/'
   },
-  {
-    name: 'Pricing',
-    path: '/pricing'
-  },
-  {
-    name: 'Contact us',
-    path: '/contact-us'
-  }
+  // {
+  //   name: 'Pricing',
+  //   path: '/pricing'
+  // },
+  // {
+  //   name: 'Contact us',
+  //   path: '/contact-us'
+  // }
 ]
 
 function Header() {
