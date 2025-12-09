@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Timeline } from "@/components/ui/timeline";
-import { Clock, ExternalLink, Star, Ticket, Wallet } from 'lucide-react';
+import { ArrowLeft, Clock, ExternalLink, Star, Ticket, Wallet } from 'lucide-react';
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { title } from 'process';
@@ -161,7 +161,12 @@ function Itinerary() {
     ] : [];
     return (
         <div className="relative w-full h-[80vh] overflow-auto">
-            {tripData && <Timeline data={data} tripData={tripData} />}
+            {tripData ? <Timeline data={data} tripData={tripData} />
+                :
+                <div>
+                <Image src={'/travel.jpg'} alt='travel' width={'800'} height={800} className='w-full h-full object-cover rounded-3xl' />
+                </div>
+            }
         </div>
     )
 }
