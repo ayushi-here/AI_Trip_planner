@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 📸 Application Screenshots
 
-## Getting Started
+### 🔐 User Authentication
+Secure login system for users before accessing trip planning features.
 
-First, run the development server:
+![Login](public/ss/login.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🏠 Landing Page
+Clean and minimal landing page introducing the AI Trip Planner.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![Home](public/ss/front.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+### 💬 Trip Input via AI Chat
+Users enter trip details such as destination, duration, budget, and group size.
 
-To learn more about Next.js, take a look at the following resources:
+![Chat Input](public/ss/chat.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🏨 AI-Generated Hotel Recommendations
+Hotels suggested by AI with pricing, ratings, and real images fetched via Google Places API.
 
-## Deploy on Vercel
+![Hotels](public/ss/outputhotel.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🗓️ Day-wise Trip Itinerary
+Timeline-based UI showing activities, timings, and ticket details.
+
+![Days](public/ss/outputdays.png)
+![Days](public/ss/outputdays2.png)
